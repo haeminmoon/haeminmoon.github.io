@@ -11,7 +11,7 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Harace Moon","sameAs":["https://github.com/heaminmoon","https://www.facebook.com/profile.php?id=100001720592400","https://www.linkedin.com/in/haemin-moon-a0284315a/","mailto:mym0846@gmail.com"],"image":"/source/_images/profile.jpeg"},"articleBody":"MAC의 OSX 환경에서 aws-cli 설치 방법과 초기 Credential 설정 방법에 대해 정리한 글 입니다.\n\nPre-installationPython이 기본적으로 설치되어 있어야 합니다. (Mac에는 기본적으로 Python이 설치 되어 있다.)1python --version\n\npython 버전 확인 및 설치 유무 확인\n\nInstallation기본적으로 aws-cli를 설치하는 방법은 다양한 방법들이 존재하나, 해당 포스트에서는 Bundle을 이용한 설치를 진행해보고자 한다.\n\nStep1 : aws-cli bundle 설치\n1curl \"https://s3.amazonaws.com/aws-cli/awscli-bundle.zip\" -o \"awscli-bundle.zip\"\n\nStep2 : aws-cli bundle 압축 해제\n1unzip awscli-bundle.zip\n\nStep3 : 관리자 권한으로 aws-cli 설치 프로그램 실행\n1sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws\n\n\nConfiguration다음 명령어를 실행 후, IAM에서 발급 받은 정보룰 입력하면 된다.12345aws configure# AWS Access Key ID [None]: Input your access key id# AWS Secret Access Key [None]: Input your secret access key# Default region name [None]: ap-northeast-2# Default output format [None]: json\n\nAWS IAM 설정 참조 링크\n\n모든 설정이 끝난난 후, ‘.aws’ 경로에 ‘configure, credential’이 생성된 것을 확인 할 수 있다.\n\n설정 변경시, 설정 Command를 실행하는 방법과 직접 파일을 편집하는 방법 모두 가능하다.\n\n","dateCreated":"2019-02-06T00:00:00+09:00","dateModified":"2019-02-07T23:25:16+09:00","datePublished":"2019-02-06T00:00:00+09:00","description":"MAC의 OSX 환경에서 aws-cli 설치 방법과 초기 Credential 설정 방법에 대해 정리한 글 입니다.","headline":"AWS-CLI Installation","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://haeminmoon.github.io/2019/02/06/aws-cli/"},"publisher":{"@type":"Organization","name":"Harace Moon","sameAs":["https://github.com/heaminmoon","https://www.facebook.com/profile.php?id=100001720592400","https://www.linkedin.com/in/haemin-moon-a0284315a/","mailto:mym0846@gmail.com"],"image":"/source/_images/profile.jpeg","logo":{"@type":"ImageObject","url":"/source/_images/profile.jpeg"}},"url":"http://haeminmoon.github.io/2019/02/06/aws-cli/","keywords":"aws, aws-cli, mac"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Harace Moon","sameAs":["https://github.com/heaminmoon","https://www.facebook.com/profile.php?id=100001720592400","https://www.linkedin.com/in/haemin-moon-a0284315a/","mailto:mym0846@gmail.com"],"image":"profile.jpeg"},"articleBody":"MAC의 OSX 환경에서 aws-cli 설치 방법과 초기 Credential 설정 방법에 대해 정리한 글 입니다.\n\nPre-installationPython이 기본적으로 설치되어 있어야 합니다. (Mac에는 기본적으로 Python이 설치 되어 있다.)1python --version\n\npython 버전 확인 및 설치 유무 확인\n\nInstallation기본적으로 aws-cli를 설치하는 방법은 다양한 방법들이 존재하나, 해당 포스트에서는 Bundle을 이용한 설치를 진행해보고자 한다.\n\nStep1 : aws-cli bundle 설치\n1curl \"https://s3.amazonaws.com/aws-cli/awscli-bundle.zip\" -o \"awscli-bundle.zip\"\n\nStep2 : aws-cli bundle 압축 해제\n1unzip awscli-bundle.zip\n\nStep3 : 관리자 권한으로 aws-cli 설치 프로그램 실행\n1sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws\n\n\nConfiguration다음 명령어를 실행 후, IAM에서 발급 받은 정보룰 입력하면 된다.12345aws configure# AWS Access Key ID [None]: Input your access key id# AWS Secret Access Key [None]: Input your secret access key# Default region name [None]: ap-northeast-2# Default output format [None]: json\n\nAWS IAM 설정 참조 링크\n\n모든 설정이 끝난난 후, ‘.aws’ 경로에 ‘configure, credential’이 생성된 것을 확인 할 수 있다.\n\n설정 변경시, 설정 Command를 실행하는 방법과 직접 파일을 편집하는 방법 모두 가능하다.\n\n","dateCreated":"2019-02-06T00:00:00+09:00","dateModified":"2019-02-07T23:25:16+09:00","datePublished":"2019-02-06T00:00:00+09:00","description":"MAC의 OSX 환경에서 aws-cli 설치 방법과 초기 Credential 설정 방법에 대해 정리한 글 입니다.","headline":"AWS-CLI Installation","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://haeminmoon.github.io/2019/02/06/aws-cli/"},"publisher":{"@type":"Organization","name":"Harace Moon","sameAs":["https://github.com/heaminmoon","https://www.facebook.com/profile.php?id=100001720592400","https://www.linkedin.com/in/haemin-moon-a0284315a/","mailto:mym0846@gmail.com"],"image":"profile.jpeg","logo":{"@type":"ImageObject","url":"profile.jpeg"}},"url":"http://haeminmoon.github.io/2019/02/06/aws-cli/","keywords":"aws, aws-cli, mac"}</script>
     <meta name="description" content="MAC의 OSX 환경에서 aws-cli 설치 방법과 초기 Credential 설정 방법에 대해 정리한 글 입니다.">
 <meta name="keywords" content="aws,aws-cli,mac">
 <meta property="og:type" content="blog">
@@ -29,7 +29,7 @@
         
     
     
-        <meta property="og:image" content="http://haeminmoon.github.io/assets/images/source/_images/profile.jpeg"/>
+        <meta property="og:image" content="http://haeminmoon.github.io/assets/images/profile.jpeg"/>
     
     
     
@@ -63,7 +63,7 @@
             <a class="header-right-picture " href="#about">
         
         
-            <img class="header-picture" src="/assets/images/source/_images/profile.jpeg" alt="Author&#39;s picture">
+            <img class="header-picture" src="/assets/images/profile.jpeg" alt="Author&#39;s picture">
         
         </a>
     
@@ -81,7 +81,7 @@
         
             <div class="sidebar-profile">
                 <a href="/#about">
-                    <img class="sidebar-profile-picture" src="/assets/images/source/_images/profile.jpeg" alt="Author&#39;s picture">
+                    <img class="sidebar-profile-picture" src="/assets/images/profile.jpeg" alt="Author&#39;s picture">
                 </a>
                 <h4 class="sidebar-profile-name">Harace Moon</h4>
                 
@@ -276,7 +276,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/02/06/Iterator-2/" data-tooltip="Iterator - (2)" aria-label="PREVIOUS: Iterator - (2)">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/02/06/Iterator-1/" data-tooltip="Iterator - (1)" aria-label="PREVIOUS: Iterator - (1)">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
@@ -372,7 +372,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/02/06/Iterator-2/" data-tooltip="Iterator - (2)" aria-label="PREVIOUS: Iterator - (2)">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/02/06/Iterator-1/" data-tooltip="Iterator - (1)" aria-label="PREVIOUS: Iterator - (1)">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
@@ -489,7 +489,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/assets/images/source/_images/profile.jpeg" alt="Author&#39;s picture">
+            <img id="about-card-picture" src="/assets/images/profile.jpeg" alt="Author&#39;s picture">
         
             <h4 id="about-card-name">Harace Moon</h4>
         
@@ -554,25 +554,6 @@
                 <div class="media">
                     
                     <div class="media-body">
-                        <a class="link-unstyled" href="http://haeminmoon.github.io/2019/02/06/Iterator-1/">
-                            <h3 class="media-heading">Iterator - (1)</h3>
-                        </a>
-                        <span class="media-meta">
-                            <span class="media-date text-small">
-                                
-                                    Feb 6, 2019
-                                
-                            </span>
-                        </span>
-                        <div class="media-content hide-xs font-merryweather"><p>Javascript의 Iterator와 ES6+에서의 순회 기법에 대해 정리한 글 입니다.</p></div>
-                    </div>
-                    <div style="clear:both;"></div>
-                    <hr>
-                </div>
-                
-                <div class="media">
-                    
-                    <div class="media-body">
                         <a class="link-unstyled" href="http://haeminmoon.github.io/2019/02/06/Iterator-2/">
                             <h3 class="media-heading">Iterator - (2)</h3>
                         </a>
@@ -584,6 +565,25 @@
                             </span>
                         </span>
                         <div class="media-content hide-xs font-merryweather"><p>Javascript의 Iterator 대해 정리한 글 입니다.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://haeminmoon.github.io/2019/02/06/Iterator-1/">
+                            <h3 class="media-heading">Iterator - (1)</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Feb 6, 2019
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Javascript의 Iterator와 ES6+에서의 순회 기법에 대해 정리한 글 입니다.</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -639,7 +639,7 @@
 
         
         
-<div id="cover" style="background-image:url('/assets/images/cover1.jpg');"></div>
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
 <script src="/assets/js/script-dbd16rvloemmuxdzniplmnxxvwoz24eya9wol0b7vvmlokgqsjivmb8dnscy.min.js"></script>
 <!--SCRIPTS END-->
