@@ -1,0 +1,670 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Harace&#39;s Tech Blog">
+    <title>Iterator - (2) - Harace&#39;s Tech Blog</title>
+    <meta name="author" content="Harace Moon">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Harace Moon","sameAs":["https://github.com/heaminmoon","https://www.facebook.com/profile.php?id=100001720592400","https://www.linkedin.com/in/haemin-moon-a0284315a/","mailto:mym0846@gmail.com"],"image":"profile.jpeg"},"articleBody":"Javascript의 Iterator 대해 정리한 글 입니다.\n\nIterator - (1)에서는 Iterator와 ES6의 순회에 대해 알아보았으니, Iterator의 정확한 개념과 동작 방식에 대해 알아보고자 한다.\nIterator의 동작 방식example_1js12345678// Arrayconst arr = [1, 2, 3];const iter = arr[Symbol.iterator](); // iter에 arr의 iterator를 담기.console.log(iter.next()); // { value: 1, done: false }console.log(iter.next()); // { value: 2, done: false }console.log(iter.next()); // { value: 3, done: false }console.log(iter.next()); // { value: undefined, done: true }\nexample_1 예제 코드에서는 Iterator의 동작 방식을 보여주고 있다. next()가 평가되면 { value, done } 객체가 리턴되는 모습을 볼 수 있다.\n여기서 Iterator의 한 가지 특징을 살펴보자면, Iterator는 next()가 평가되기 전까지는 다음 리턴 값을 반환하지 않는다는 특징을 가지고 있다.example_2js123456// Arrayconst arr = [1, 2, 3];const iter = arr[Symbol.iterator](); // iter에 arr의 iterator를 담기.console.log(iter.next()); // { value: 1, done: false }for (const i of iter) console.log(i) // 2 3\n\nexample_2 예제 코드와 같이 Iterator는 next() 메소드에 의해 value로 떨어지는 값만 평가하는 모습을 볼 수 있다.\n\nIterable/Iterator protocol\nIterable : Iterator를 리턴하는 [Symbol.iterator]()를 가진 값\nIterator : { value, done } 객체를 리턴하는 next() 메소드를 가진 값\nIterable/Iterator protocol : Iterable을 for…of, 전개 연산자 등과 함께 동작하도록한 규약\n\nexample_3js123// Arrayconst arr = [1, 2, 3];for (const i of list) console.log(i); // 1 2 3\n앞서 기술한 정의가 example_1, example_2, example_3 예제 코드에 어떻게 접목되어 동작하는지 설명해보자면, 다음과 같다.\n\nArray는 Iterable 이며, Iterator를 return 할 수 있다. 즉, Iterable/Iterator protocol에 따라 for…of 문법과 함께 순회 동작을 실행 할 수 있다.\n\n사용자 정의 Iterableexample_4js1234567891011121314151617const iterable = {    [Symbol.iterator]() {        let i = 0;        return {        next() {            return i == 4 ? { done: true } : { value: i++, done: false };        },        [Symbol.iterator]() { return this; }         }    }};let iterator = iterable[Symbol.iterator]();console.log(iterator.next()); // { value: 0, done: false }console.log(iterator.next()); // { value: 1, done: false }for (const i of iterator) console.log(a); // 2 3console.log(iterator.next()); // { value: undefined, done: true }\nexample_4에서 사용자 정의 Iterable을 직접 구현해 봄으로써 Iterator와 Iterable에 대해 확실한 구분과 동작 원리에 대해 개념을 확립 할 수 있을 것이다.\nIterator와 함수형 프로그래밍 그리고 ES6Iterator에 대해 이렇게까지 세세하게 정리한 이유는 그만큼 중요한 개념이기 때문이다. 특히 Iterator는 자바스크립트에서 함수형 프로그래밍을 할 때, 아주 중요하다. 그 이유는 Iterable/Iterator protocol를 적극 활용하여 코드의 추상화와 다형성을 부여하여 보다 간결하고 예쁜 코드를 작성할 수 있기 때문이다. 뿐만 아니라 성능 측면에서도 ‘지연 평가(Lazy), 동시성 프로그래밍’을 가능하게끔 하기에 우수한 애플리케이션을 개발하기 위해서라도 아주 중요한 개념이라고 할 수 있다.\n","dateCreated":"2019-02-06T00:00:00+09:00","dateModified":"2019-09-01T23:50:35+09:00","datePublished":"2019-02-06T00:00:00+09:00","description":"Javascript의 Iterator 대해 정리한 글 입니다.","headline":"Iterator - (2)","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://haeminmoon.github.io/2019/02/06/Iterator-2/"},"publisher":{"@type":"Organization","name":"Harace Moon","sameAs":["https://github.com/heaminmoon","https://www.facebook.com/profile.php?id=100001720592400","https://www.linkedin.com/in/haemin-moon-a0284315a/","mailto:mym0846@gmail.com"],"image":"profile.jpeg","logo":{"@type":"ImageObject","url":"profile.jpeg"}},"url":"http://haeminmoon.github.io/2019/02/06/Iterator-2/","keywords":"Javascript, ES6+, Iterator"}</script>
+    <meta name="description" content="Javascript의 Iterator 대해 정리한 글 입니다.">
+<meta name="keywords" content="Javascript,ES6+,Iterator">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Iterator - (2)">
+<meta property="og:url" content="http://haeminmoon.github.io/2019/02/06/Iterator-2/index.html">
+<meta property="og:site_name" content="Harace&#39;s Tech Blog">
+<meta property="og:description" content="Javascript의 Iterator 대해 정리한 글 입니다.">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-09-01T14:50:35.460Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Iterator - (2)">
+<meta name="twitter:description" content="Javascript의 Iterator 대해 정리한 글 입니다.">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://haeminmoon.github.io/assets/images/profile.jpeg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-c4ozcsklz4kht2pebhp44xorvyverh23toayhn7i6ubrpyedak24hv1v0hyd.min.css">
+    <!--STYLES END-->
+    
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Harace&#39;s Tech Blog</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/profile.jpeg" alt="Author&#39;s picture">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/profile.jpeg" alt="Author&#39;s picture">
+                </a>
+                <h4 class="sidebar-profile-name">Harace Moon</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>Today, I learn</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="Home">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="Categories">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="Tags">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="Archives">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link open-algolia-search" href="#search" title="Search">
+                    
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="About">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/heaminmoon" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://www.facebook.com/profile.php?id=100001720592400" target="_blank" rel="noopener" title="Facebook">
+                    
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://www.linkedin.com/in/haemin-moon-a0284315a/" target="_blank" rel="noopener" title="LinkedIn">
+                    
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="mailto:mym0846@gmail.com" target="_blank" rel="noopener" title="Mail">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            Iterator - (2)
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2019-02-06T00:00:00+09:00">
+	
+		    Feb 06, 2019
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/Javascript/">Javascript</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>Javascript의 Iterator 대해 정리한 글 입니다.</p>
+<a id="more"></a>
+<p><a href="https://haeminmoon.github.io/2019/02/06/iterator-1/">Iterator - (1)</a>에서는 Iterator와 ES6의 순회에 대해 알아보았으니, Iterator의 정확한 개념과 동작 방식에 대해 알아보고자 한다.</p>
+<h2 id="Iterator의-동작-방식"><a href="#Iterator의-동작-방식" class="headerlink" title="Iterator의 동작 방식"></a>Iterator의 동작 방식</h2><figure class="codeblock codeblock--tabbed"><figcaption><span>example_1</span><ul class="tabs"><li class="tab active">js</li></ul></figcaption><div class="tabs-content"><figure class="highlight js" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Array</span></span><br><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">const</span> iter = arr[<span class="built_in">Symbol</span>.iterator](); <span class="comment">// iter에 arr의 iterator를 담기.</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(iter.next()); <span class="comment">// { value: 1, done: false }</span></span><br><span class="line"><span class="built_in">console</span>.log(iter.next()); <span class="comment">// { value: 2, done: false }</span></span><br><span class="line"><span class="built_in">console</span>.log(iter.next()); <span class="comment">// { value: 3, done: false }</span></span><br><span class="line"><span class="built_in">console</span>.log(iter.next()); <span class="comment">// { value: undefined, done: true }</span></span><br></pre></td></tr></tbody></table></figure></div></figure>
+<p>example_1 예제 코드에서는 Iterator의 동작 방식을 보여주고 있다. next()가 평가되면 { value, done } 객체가 리턴되는 모습을 볼 수 있다.</p>
+<p>여기서 Iterator의 한 가지 특징을 살펴보자면, Iterator는 next()가 평가되기 전까지는 다음 리턴 값을 반환하지 않는다는 특징을 가지고 있다.<br><figure class="codeblock codeblock--tabbed"><figcaption><span>example_2</span><ul class="tabs"><li class="tab active">js</li></ul></figcaption><div class="tabs-content"><figure class="highlight js" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Array</span></span><br><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">const</span> iter = arr[<span class="built_in">Symbol</span>.iterator](); <span class="comment">// iter에 arr의 iterator를 담기.</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(iter.next()); <span class="comment">// { value: 1, done: false }</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> i <span class="keyword">of</span> iter) <span class="built_in">console</span>.log(i) <span class="comment">// 2 3</span></span><br></pre></td></tr></tbody></table></figure></div></figure></p>
+<blockquote>
+<p>example_2 예제 코드와 같이 Iterator는 next() 메소드에 의해 value로 떨어지는 값만 평가하는 모습을 볼 수 있다.</p>
+</blockquote>
+<h2 id="Iterable-Iterator-protocol"><a href="#Iterable-Iterator-protocol" class="headerlink" title="Iterable/Iterator protocol"></a>Iterable/Iterator protocol</h2><ul>
+<li>Iterable : Iterator를 리턴하는 <span class="highlight-text danger">[Symbol.iterator]()</span>를 가진 값</li>
+<li>Iterator : { value, done } 객체를 리턴하는 next() 메소드를 가진 값</li>
+<li>Iterable/Iterator protocol : Iterable을 for…of, 전개 연산자 등과 함께 동작하도록한 규약</li>
+</ul>
+<figure class="codeblock codeblock--tabbed"><figcaption><span>example_3</span><ul class="tabs"><li class="tab active">js</li></ul></figcaption><div class="tabs-content"><figure class="highlight js" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Array</span></span><br><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> i <span class="keyword">of</span> list) <span class="built_in">console</span>.log(i); <span class="comment">// 1 2 3</span></span><br></pre></td></tr></tbody></table></figure></div></figure>
+<p>앞서 기술한 정의가 <strong>example_1, example_2, example_3</strong> 예제 코드에 어떻게 접목되어 동작하는지 설명해보자면, 다음과 같다.</p>
+<blockquote>
+<p>Array는 Iterable 이며, Iterator를 return 할 수 있다. 즉, Iterable/Iterator protocol에 따라 for…of 문법과 함께 순회 동작을 실행 할 수 있다.</p>
+</blockquote>
+<h2 id="사용자-정의-Iterable"><a href="#사용자-정의-Iterable" class="headerlink" title="사용자 정의 Iterable"></a>사용자 정의 Iterable</h2><figure class="codeblock codeblock--tabbed"><figcaption><span>example_4</span><ul class="tabs"><li class="tab active">js</li></ul></figcaption><div class="tabs-content"><figure class="highlight js" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> iterable = {</span><br><span class="line">    [<span class="built_in">Symbol</span>.iterator]() {</span><br><span class="line">        <span class="keyword">let</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> {</span><br><span class="line">        next() {</span><br><span class="line">            <span class="keyword">return</span> i == <span class="number">4</span> ? { <span class="attr">done</span>: <span class="literal">true</span> } : { <span class="attr">value</span>: i++, <span class="attr">done</span>: <span class="literal">false</span> };</span><br><span class="line">        },</span><br><span class="line">        [<span class="built_in">Symbol</span>.iterator]() { <span class="keyword">return</span> <span class="keyword">this</span>; } </span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> iterator = iterable[<span class="built_in">Symbol</span>.iterator]();</span><br><span class="line"><span class="built_in">console</span>.log(iterator.next()); <span class="comment">// { value: 0, done: false }</span></span><br><span class="line"><span class="built_in">console</span>.log(iterator.next()); <span class="comment">// { value: 1, done: false }</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> i <span class="keyword">of</span> iterator) <span class="built_in">console</span>.log(a); <span class="comment">// 2 3</span></span><br><span class="line"><span class="built_in">console</span>.log(iterator.next()); <span class="comment">// { value: undefined, done: true }</span></span><br></pre></td></tr></tbody></table></figure></div></figure>
+<p><strong>example_4</strong>에서 사용자 정의 Iterable을 직접 구현해 봄으로써 Iterator와 Iterable에 대해 확실한 구분과 동작 원리에 대해 개념을 확립 할 수 있을 것이다.</p>
+<h2 id="Iterator와-함수형-프로그래밍-그리고-ES6"><a href="#Iterator와-함수형-프로그래밍-그리고-ES6" class="headerlink" title="Iterator와 함수형 프로그래밍 그리고 ES6"></a>Iterator와 함수형 프로그래밍 그리고 ES6</h2><p>Iterator에 대해 이렇게까지 세세하게 정리한 이유는 그만큼 중요한 개념이기 때문이다. 특히 Iterator는 자바스크립트에서 함수형 프로그래밍을 할 때, 아주 중요하다. 그 이유는 Iterable/Iterator protocol를 적극 활용하여 코드의 추상화와 다형성을 부여하여 보다 간결하고 예쁜 코드를 작성할 수 있기 때문이다. 뿐만 아니라 성능 측면에서도 ‘지연 평가(Lazy), 동시성 프로그래밍’을 가능하게끔 하기에 우수한 애플리케이션을 개발하기 위해서라도 아주 중요한 개념이라고 할 수 있다.</p>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/ES6/">ES6+</a> <a class="tag tag--primary tag--small t-link" href="/tags/Iterator/">Iterator</a> <a class="tag tag--primary tag--small t-link" href="/tags/Javascript/">Javascript</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/02/06/Iterator-1/" data-tooltip="Iterator - (1)" aria-label="NEXT: Iterator - (1)">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://haeminmoon.github.io/2019/02/06/Iterator-2/" title="Share on Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://haeminmoon.github.io/2019/02/06/Iterator-2/" title="Share on Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://haeminmoon.github.io/2019/02/06/Iterator-2/" title="Share on Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Harace Moon. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/02/06/Iterator-1/" data-tooltip="Iterator - (1)" aria-label="NEXT: Iterator - (1)">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://haeminmoon.github.io/2019/02/06/Iterator-2/" title="Share on Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://haeminmoon.github.io/2019/02/06/Iterator-2/" title="Share on Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://haeminmoon.github.io/2019/02/06/Iterator-2/" title="Share on Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://haeminmoon.github.io/2019/02/06/Iterator-2/">
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://haeminmoon.github.io/2019/02/06/Iterator-2/">
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://haeminmoon.github.io/2019/02/06/Iterator-2/">
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/profile.jpeg" alt="Author&#39;s picture">
+        
+            <h4 id="about-card-name">Harace Moon</h4>
+        
+            <div id="about-card-bio"><p>Today, I learn</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>Software Developer</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br>
+                Korea
+            </div>
+        
+    </div>
+</div>
+
+        
+            <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-times"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search" class="form-control input--large search-input" placeholder="Search ">
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://haeminmoon.github.io/2019/02/01/Functional-Programming/">
+                            <h3 class="media-heading">Functional Programming &amp; ES6+</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Feb 1, 2019
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>함수형 자바스크립트를 위한 기초 용어 및 지식을 정리한 글 입니다.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://haeminmoon.github.io/2019/02/06/Iterator-2/">
+                            <h3 class="media-heading">Iterator - (2)</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Feb 6, 2019
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Javascript의 Iterator 대해 정리한 글 입니다.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://haeminmoon.github.io/2019/02/06/Iterator-1/">
+                            <h3 class="media-heading">Iterator - (1)</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Feb 6, 2019
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Javascript의 Iterator와 ES6+에서의 순회 기법에 대해 정리한 글 입니다.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://haeminmoon.github.io/2019/02/06/aws-cli/">
+                            <h3 class="media-heading">AWS-CLI Installation</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Feb 6, 2019
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>MAC의 OSX 환경에서 aws-cli 설치 방법과 초기 Credential 설정 방법에 대해 정리한 글 입니다.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://haeminmoon.github.io/2019/02/06/aws-sam-cli/">
+                            <h3 class="media-heading">AWS-SAM-CLI Installation</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Feb 6, 2019
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>AWS Lambda의 Serverless framework인 SAM-CLI 설치 방법에 대해 정리한 글 입니다. (OSX)</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium" data-message-zero="no post found" data-message-one="1 post found" data-message-other="{n} posts found">
+                5 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-dbd16rvloemmuxdzniplmnxxvwoz24eya9wol0b7vvmlokgqsjivmb8dnscy.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://haeminmoon.github.io/2019/02/06/Iterator-2/';
+                 
+                    this.page.identifier = '2019/02/06/Iterator-2/';
+                 
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'haeminmoon-github-io';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script>
+        var algoliaClient = algoliasearch('BCG1DACE7A', '20fe66a6a899add3d02b51d769c5916a');
+        var algoliaIndex = algoliaClient.initIndex('Harace&#39;s blog');
+    </script>
+
+
+    </body>
+</html>

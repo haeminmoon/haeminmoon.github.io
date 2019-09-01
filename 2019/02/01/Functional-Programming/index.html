@@ -1,0 +1,692 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Harace&#39;s Tech Blog">
+    <title>Functional Programming &amp; ES6+ - Harace&#39;s Tech Blog</title>
+    <meta name="author" content="Harace Moon">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Harace Moon","sameAs":["https://github.com/heaminmoon","https://www.facebook.com/profile.php?id=100001720592400","https://www.linkedin.com/in/haemin-moon-a0284315a/","mailto:mym0846@gmail.com"],"image":"profile.jpeg"},"articleBody":"함수형 자바스크립트를 위한 기초 용어 및 지식을 정리한 글 입니다.\n\n함수형 프로그래밍과 자바스크립트“Functional Programming + Javascript = Functional javascript”\n함수형 프로그래밍이란?비지니스 관점에서, 프로젝트 진행 관점에서 바라본 프로그래밍의 정의는 각각 틀려질 수 있겠다. 하지만 순수하게 프로그래머로서의 관점에서 기본적으로 프로그래밍의 본질은 “한 번에 해결하기 어려운 큰 문제를 작은 단위로 분할하여 해결하고, 그렇게 나온 결과물을 다시 조합하여 새로운 문제를 해결 하는 것” 이라고 생각한다.\n즉, 위 의견에 근거하여 프로그래밍의 본질에서 중요한 것을 정의해 보자면 다음과 같다.1234561. 문제를 작은 단위로 분할하는 것. (Divide and conquer)2. 작은 결과들을 조합하는 것. (composability)3. 새로운 문제를 해결하기 위해 재사용성을 높이는 것. (Reusability)우리는 계속해서 크고 복잡한 문제를 풀어야 하고, 또한 비슷하지만 조금은 다른 문제들을 풀어야 한다. 앞서 만들어 놓은 산출물을 쉽게 조합하여 새로운 문제를 해결할 수 있다면 프로그래머의 생산성은 비약적으로 늘 수 있을 것이다.\n모든 프로그래밍 패러다임은 성공적인 프로그래밍을 위해 존재한다. 성공적인 프로그래밍의 척도에는 사용성, 성능, 확장성, 기획 변경에 대한 대응력 등이 있으며, 이것들을 효율적이고 생산적으로 이루는 일이 성공적인 프로그래밍이다.\n함수형 프로그래밍은 성공적인 프로그래밍을 위해 부수 효과(Side effect)를 최대한 멀리하고 조합성을 강조하는 프로그래밍 패러다임이다. 함수형 프로그래밍이 부수 효과를 최대한 멀리하는 이유는 다음 두 가지를 위해서다. 하나는 오류를 줄이기 위해서고, 또 하나는 조합성 혹은 모듈화 수준을 높이기 위해서다. 오류가 없는 것은 좋은 프로그램의 가장 중요한 척도이고, 높은 모듈화 수준은 성공적인 프로그래밍의 핵심 요소다. 높은 모듈화 수준은 생산성을 높이고, 오류 없는 함수들의 조합은 프로그램 전체의 안정성을 높여 준다.\n즉, 함수형 프로그래밍은 위 논리에 의거하여 함수형 프로그래밍의 기본 패러다임을 기준점으로 삼아 프로그래밍하는 것을 말한다.\n함수형 자바스크립트 기초평가\n코드가 계산(Evaluation) 되어 값을 만드는 것\n\n순수 함수\n순수 함수는 외부의 상태를 변경하지 않으면서 동일한 인자에 대해 항상 똑같은 값을 리턴하는 함수다. (부수효과가 없는 함수)\n조건 1. 동일한 인자에 대해 항상 같은 값을 리턴하는 함수\n조건 2. 부수효과가 없는 함수\n\n\n\n순수 함수가 아닌 함수 / 조건1 불충족example_2js1234567let c = 10;const add = (a, b) =&gt; a + b + c;console.log(add(1, 2)); // 13console.log(add(1, 2)); // 13c = 100;console.log(add(1, 2)); // 103// 함수내에서 외부의 c라는 변수 값이 변하면 결과값도 달라지기 때문. 만약 c가 상수(const)라면 add2도 순수함수.\n순수 함수가 아닌 함수 / 조건2 불충족example_2js12345678910let c = 10;const add = (a, b) =&gt; {    c = b + 10;    return a + b;}console.log(add(1, 2)); // 13console.log(add(1, 2)); // 13c = 100;console.log(add(1, 2)); // 103// 동일한 인자에 대해 항상 리턴하는 값이 같더라고, 외부의 상태를 변경, 즉 부수효과가 있는 함수이기에 순수 함수가 아니다.\n순수 함수example_3js1234const add = (a, b) =&gt; a + b;console.log( add(1, 2) ); // 3// 어디서 실행해도 add(1, 2)는 항상 3을 리턴하고 외부 상태를 변경하지 않았기 때문에 순수 함수이다.\n\n궁극적으로 평가 시점이 무관하다는 특성으로 효율적인 로직을 구성하는 것이 함수형 프로그래밍 패러다임. (순수 함수의 특성을 활용)\n\n일급\n값으로 다룰 수 있다.\n변수에 담을 수 있다.\n함수의 인자로 사용될 수 있다.\n함수의 결과롤 사용될 수 있다.\n\n일급 함수\n함수를 값으로 다룰 수 있다.\n조합성과 추상화의 도구로 활용할 수 있다.\n\n자바스크립트에서 함수는 일급이다. 함수가 일급이라는 것은, 함수를 값으로 다룰 수 있다는 이야기다.함수를 값으로 다룰 수 있다는 이야기는 함수를 다음과 같이 활용 할 수 있다는 것이다.example_4js12345678910// 함수를 변수에 담을 수 있다.const add3 = a =&gt; a + 3;console.log(add3); // a =&gt; a + 3console.log(add3(1)); // 4const f = () =&gt; () =&gt; 1;console.log(f()); // () =&gt; 1const f2 = f();console.log(f2()); // 1즉, 함수가 일급이라는 것은 함수의 결과값으로 함수를 활용 할 수 있음을 의미한다.\n고차 함수\n일급 함수의 성질을 활용하여 함수를 값으로 다루는 함수  \n\n고차 함수는 크게 두 가지로 나뉘어 진다.  \n1. 함수를 인자로 받아서 실행하는 함수.example_5js12345const execute = f =&gt; f(1);const add3 = a =&gt; a + 3;console.log(execute(add3)); // 4console.log(execute(a =&gt; a - 1)); // 0위와 같은 프로그래밍 방식을 ‘Applicative programming’ 이라고도 한다.  \n2. 함수를 만들어 리턴하는 함수 (클로저를 만들어 리턴하는 함수)example_6js12345const addMaker = a =&gt; b =&gt; a + b;const add10 = addMaker(10);console.log(add10(5)); // 15console.log(add10(10)); // 20  \n위 예제(example_6)에서 addMaker가 함수를 만들어 리턴하는 함수 이다.  \n이때 리턴되는 함수인 ‘b =&gt; a + b’ 는 클로저 이다. ‘b =&gt; a + b’ 가 만들어질 때의 환경인 a를 기억하고 있기 때문이다.  \n앞서 기술한 ‘자바스크립트와 함수형 프로그래밍 용어’의 개념과 원리를 통해 함수형 자바스크립의 기초와 기반에 대해 알아보았다.\n","dateCreated":"2019-02-01T00:00:00+09:00","dateModified":"2019-02-12T23:12:39+09:00","datePublished":"2019-02-01T00:00:00+09:00","description":"함수형 자바스크립트를 위한 기초 용어 및 지식을 정리한 글 입니다.","headline":"Functional Programming & ES6+","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://haeminmoon.github.io/2019/02/01/Functional-Programming/"},"publisher":{"@type":"Organization","name":"Harace Moon","sameAs":["https://github.com/heaminmoon","https://www.facebook.com/profile.php?id=100001720592400","https://www.linkedin.com/in/haemin-moon-a0284315a/","mailto:mym0846@gmail.com"],"image":"profile.jpeg","logo":{"@type":"ImageObject","url":"profile.jpeg"}},"url":"http://haeminmoon.github.io/2019/02/01/Functional-Programming/","keywords":"Javascript, ES6+"}</script>
+    <meta name="description" content="함수형 자바스크립트를 위한 기초 용어 및 지식을 정리한 글 입니다.">
+<meta name="keywords" content="Javascript,ES6+">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Functional Programming &amp; ES6+">
+<meta property="og:url" content="http://haeminmoon.github.io/2019/02/01/Functional-Programming/index.html">
+<meta property="og:site_name" content="Harace&#39;s Tech Blog">
+<meta property="og:description" content="함수형 자바스크립트를 위한 기초 용어 및 지식을 정리한 글 입니다.">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-02-12T14:12:39.001Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Functional Programming &amp; ES6+">
+<meta name="twitter:description" content="함수형 자바스크립트를 위한 기초 용어 및 지식을 정리한 글 입니다.">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://haeminmoon.github.io/assets/images/profile.jpeg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-c4ozcsklz4kht2pebhp44xorvyverh23toayhn7i6ubrpyedak24hv1v0hyd.min.css">
+    <!--STYLES END-->
+    
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Harace&#39;s Tech Blog</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/profile.jpeg" alt="Author&#39;s picture">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/profile.jpeg" alt="Author&#39;s picture">
+                </a>
+                <h4 class="sidebar-profile-name">Harace Moon</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>Today, I learn</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="Home">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="Categories">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="Tags">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="Archives">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link open-algolia-search" href="#search" title="Search">
+                    
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="About">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/heaminmoon" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://www.facebook.com/profile.php?id=100001720592400" target="_blank" rel="noopener" title="Facebook">
+                    
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://www.linkedin.com/in/haemin-moon-a0284315a/" target="_blank" rel="noopener" title="LinkedIn">
+                    
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="mailto:mym0846@gmail.com" target="_blank" rel="noopener" title="Mail">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            Functional Programming &amp; ES6+
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2019-02-01T00:00:00+09:00">
+	
+		    Feb 01, 2019
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/Javascript/">Javascript</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>함수형 자바스크립트를 위한 기초 용어 및 지식을 정리한 글 입니다.</p>
+<a id="more"></a>
+<h2 id="함수형-프로그래밍과-자바스크립트"><a href="#함수형-프로그래밍과-자바스크립트" class="headerlink" title="함수형 프로그래밍과 자바스크립트"></a>함수형 프로그래밍과 자바스크립트</h2><p><strong>“Functional Programming + Javascript = Functional javascript”</strong></p>
+<h3 id="함수형-프로그래밍이란"><a href="#함수형-프로그래밍이란" class="headerlink" title="함수형 프로그래밍이란?"></a>함수형 프로그래밍이란?</h3><p>비지니스 관점에서, 프로젝트 진행 관점에서 바라본 프로그래밍의 정의는 각각 틀려질 수 있겠다. 하지만 순수하게 프로그래머로서의 관점에서 기본적으로 프로그래밍의 본질은 “한 번에 해결하기 어려운 큰 문제를 작은 단위로 분할하여 해결하고, 그렇게 나온 결과물을 다시 조합하여 새로운 문제를 해결 하는 것” 이라고 생각한다.</p>
+<p>즉, 위 의견에 근거하여 프로그래밍의 본질에서 중요한 것을 정의해 보자면 다음과 같다.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. 문제를 작은 단위로 분할하는 것. (Divide and conquer)</span><br><span class="line">2. 작은 결과들을 조합하는 것. (composability)</span><br><span class="line">3. 새로운 문제를 해결하기 위해 재사용성을 높이는 것. (Reusability)</span><br><span class="line"></span><br><span class="line">우리는 계속해서 크고 복잡한 문제를 풀어야 하고, 또한 비슷하지만 조금은 다른 문제들을 풀어야 한다. </span><br><span class="line">앞서 만들어 놓은 산출물을 쉽게 조합하여 새로운 문제를 해결할 수 있다면 프로그래머의 생산성은 비약적으로 늘 수 있을 것이다.</span><br></pre></td></tr></table></figure></p>
+<p>모든 프로그래밍 패러다임은 성공적인 프로그래밍을 위해 존재한다. 성공적인 프로그래밍의 척도에는 사용성, 성능, 확장성, 기획 변경에 대한 대응력 등이 있으며, 이것들을 효율적이고 생산적으로 이루는 일이 성공적인 프로그래밍이다.</p>
+<p>함수형 프로그래밍은 성공적인 프로그래밍을 위해 부수 효과(Side effect)를 최대한 멀리하고 조합성을 강조하는 프로그래밍 패러다임이다. 함수형 프로그래밍이 부수 효과를 최대한 멀리하는 이유는 다음 두 가지를 위해서다. 하나는 오류를 줄이기 위해서고, 또 하나는 조합성 혹은 모듈화 수준을 높이기 위해서다. 오류가 없는 것은 좋은 프로그램의 가장 중요한 척도이고, 높은 모듈화 수준은 성공적인 프로그래밍의 핵심 요소다. 높은 모듈화 수준은 생산성을 높이고, 오류 없는 함수들의 조합은 프로그램 전체의 안정성을 높여 준다.</p>
+<p>즉, 함수형 프로그래밍은 위 논리에 의거하여 함수형 프로그래밍의 기본 패러다임을 기준점으로 삼아 프로그래밍하는 것을 말한다.</p>
+<h2 id="함수형-자바스크립트-기초"><a href="#함수형-자바스크립트-기초" class="headerlink" title="함수형 자바스크립트 기초"></a>함수형 자바스크립트 기초</h2><h3 id="평가"><a href="#평가" class="headerlink" title="평가"></a>평가</h3><ul>
+<li>코드가 계산(Evaluation) 되어 값을 만드는 것</li>
+</ul>
+<h3 id="순수-함수"><a href="#순수-함수" class="headerlink" title="순수 함수"></a>순수 함수</h3><ul>
+<li>순수 함수는 외부의 상태를 변경하지 않으면서 동일한 인자에 대해 항상 똑같은 값을 리턴하는 함수다. (부수효과가 없는 함수)<ul>
+<li>조건 1. 동일한 인자에 대해 항상 같은 값을 리턴하는 함수</li>
+<li>조건 2. 부수효과가 없는 함수</li>
+</ul>
+</li>
+</ul>
+<p><strong>순수 함수가 아닌 함수 / 조건1 불충족</strong><br><figure class="codeblock codeblock--tabbed"><figcaption><span>example_2</span><ul class="tabs"><li class="tab active">js</li></ul></figcaption><div class="tabs-content"><figure class="highlight js" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> c = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">const</span> add = <span class="function">(<span class="params">a, b</span>) =&gt;</span> a + b + c;</span><br><span class="line"><span class="built_in">console</span>.log(add(<span class="number">1</span>, <span class="number">2</span>)); <span class="comment">// 13</span></span><br><span class="line"><span class="built_in">console</span>.log(add(<span class="number">1</span>, <span class="number">2</span>)); <span class="comment">// 13</span></span><br><span class="line">c = <span class="number">100</span>;</span><br><span class="line"><span class="built_in">console</span>.log(add(<span class="number">1</span>, <span class="number">2</span>)); <span class="comment">// 103</span></span><br><span class="line"><span class="comment">// 함수내에서 외부의 c라는 변수 값이 변하면 결과값도 달라지기 때문. 만약 c가 상수(const)라면 add2도 순수함수.</span></span><br></pre></td></tr></tbody></table></figure></div></figure></p>
+<p><strong>순수 함수가 아닌 함수 / 조건2 불충족</strong><br><figure class="codeblock codeblock--tabbed"><figcaption><span>example_2</span><ul class="tabs"><li class="tab active">js</li></ul></figcaption><div class="tabs-content"><figure class="highlight js" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> c = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">const</span> add = <span class="function">(<span class="params">a, b</span>) =&gt;</span> {</span><br><span class="line">    c = b + <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">}</span><br><span class="line"><span class="built_in">console</span>.log(add(<span class="number">1</span>, <span class="number">2</span>)); <span class="comment">// 13</span></span><br><span class="line"><span class="built_in">console</span>.log(add(<span class="number">1</span>, <span class="number">2</span>)); <span class="comment">// 13</span></span><br><span class="line">c = <span class="number">100</span>;</span><br><span class="line"><span class="built_in">console</span>.log(add(<span class="number">1</span>, <span class="number">2</span>)); <span class="comment">// 103</span></span><br><span class="line"><span class="comment">// 동일한 인자에 대해 항상 리턴하는 값이 같더라고, 외부의 상태를 변경, 즉 부수효과가 있는 함수이기에 순수 함수가 아니다.</span></span><br></pre></td></tr></tbody></table></figure></div></figure></p>
+<p><strong>순수 함수</strong><br><figure class="codeblock codeblock--tabbed"><figcaption><span>example_3</span><ul class="tabs"><li class="tab active">js</li></ul></figcaption><div class="tabs-content"><figure class="highlight js" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> add = <span class="function">(<span class="params">a, b</span>) =&gt;</span> a + b;</span><br><span class="line"><span class="built_in">console</span>.log( add(<span class="number">1</span>, <span class="number">2</span>) ); <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 어디서 실행해도 add(1, 2)는 항상 3을 리턴하고 외부 상태를 변경하지 않았기 때문에 순수 함수이다.</span></span><br></pre></td></tr></tbody></table></figure></div></figure></p>
+<blockquote>
+<p>궁극적으로 평가 시점이 무관하다는 특성으로 효율적인 로직을 구성하는 것이 함수형 프로그래밍 패러다임. (순수 함수의 특성을 활용)</p>
+</blockquote>
+<h3 id="일급"><a href="#일급" class="headerlink" title="일급"></a>일급</h3><ul>
+<li>값으로 다룰 수 있다.</li>
+<li>변수에 담을 수 있다.</li>
+<li>함수의 인자로 사용될 수 있다.</li>
+<li>함수의 결과롤 사용될 수 있다.</li>
+</ul>
+<h3 id="일급-함수"><a href="#일급-함수" class="headerlink" title="일급 함수"></a>일급 함수</h3><ul>
+<li>함수를 값으로 다룰 수 있다.</li>
+<li>조합성과 추상화의 도구로 활용할 수 있다.</li>
+</ul>
+<p>자바스크립트에서 함수는 일급이다. 함수가 일급이라는 것은, 함수를 값으로 다룰 수 있다는 이야기다.<br>함수를 값으로 다룰 수 있다는 이야기는 함수를 다음과 같이 활용 할 수 있다는 것이다.<br><figure class="codeblock codeblock--tabbed"><figcaption><span>example_4</span><ul class="tabs"><li class="tab active">js</li></ul></figcaption><div class="tabs-content"><figure class="highlight js" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 함수를 변수에 담을 수 있다.</span></span><br><span class="line"><span class="keyword">const</span> add3 = <span class="function"><span class="params">a</span> =&gt;</span> a + <span class="number">3</span>;</span><br><span class="line"><span class="built_in">console</span>.log(add3); <span class="comment">// a =&gt; a + 3</span></span><br><span class="line"><span class="built_in">console</span>.log(add3(<span class="number">1</span>)); <span class="comment">// 4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> f = <span class="function"><span class="params">()</span> =&gt;</span> () =&gt; <span class="number">1</span>;</span><br><span class="line"><span class="built_in">console</span>.log(f()); <span class="comment">// () =&gt; 1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> f2 = f();</span><br><span class="line"><span class="built_in">console</span>.log(f2()); <span class="comment">// 1</span></span><br></pre></td></tr></tbody></table></figure></div></figure><br>즉, 함수가 일급이라는 것은 함수의 결과값으로 함수를 활용 할 수 있음을 의미한다.</p>
+<h3 id="고차-함수"><a href="#고차-함수" class="headerlink" title="고차 함수"></a>고차 함수</h3><ul>
+<li>일급 함수의 성질을 활용하여 함수를 값으로 다루는 함수  </li>
+</ul>
+<p>고차 함수는 크게 두 가지로 나뉘어 진다.  </p>
+<p><strong>1. 함수를 인자로 받아서 실행하는 함수.</strong><br><figure class="codeblock codeblock--tabbed"><figcaption><span>example_5</span><ul class="tabs"><li class="tab active">js</li></ul></figcaption><div class="tabs-content"><figure class="highlight js" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> execute = <span class="function"><span class="params">f</span> =&gt;</span> f(<span class="number">1</span>);</span><br><span class="line"><span class="keyword">const</span> add3 = <span class="function"><span class="params">a</span> =&gt;</span> a + <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(execute(add3)); <span class="comment">// 4</span></span><br><span class="line"><span class="built_in">console</span>.log(execute(<span class="function"><span class="params">a</span> =&gt;</span> a - <span class="number">1</span>)); <span class="comment">// 0</span></span><br></pre></td></tr></tbody></table></figure></div></figure><br><strong><em>위와 같은 프로그래밍 방식을 ‘Applicative programming’ 이라고도 한다.</em></strong>  </p>
+<p><strong>2. 함수를 만들어 리턴하는 함수 (클로저를 만들어 리턴하는 함수)</strong><br><figure class="codeblock codeblock--tabbed"><figcaption><span>example_6</span><ul class="tabs"><li class="tab active">js</li></ul></figcaption><div class="tabs-content"><figure class="highlight js" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> addMaker = <span class="function"><span class="params">a</span> =&gt;</span> b =&gt; a + b;</span><br><span class="line"><span class="keyword">const</span> add10 = addMaker(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(add10(<span class="number">5</span>)); <span class="comment">// 15</span></span><br><span class="line"><span class="built_in">console</span>.log(add10(<span class="number">10</span>)); <span class="comment">// 20</span></span><br></pre></td></tr></tbody></table></figure></div></figure>  </p>
+<p>위 예제(example_6)에서 addMaker가 함수를 만들어 리턴하는 함수 이다.  </p>
+<p>이때 리턴되는 함수인 <strong><em>‘b =&gt; a + b’</em></strong> 는 클로저 이다. <strong><em>‘b =&gt; a + b’</em></strong> 가 만들어질 때의 환경인 a를 기억하고 있기 때문이다.  </p>
+<p>앞서 기술한 ‘자바스크립트와 함수형 프로그래밍 용어’의 개념과 원리를 통해 함수형 자바스크립의 기초와 기반에 대해 알아보았다.</p>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/ES6/">ES6+</a> <a class="tag tag--primary tag--small t-link" href="/tags/Javascript/">Javascript</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/02/06/aws-sam-cli/" data-tooltip="AWS-SAM-CLI Installation" aria-label="PREVIOUS: AWS-SAM-CLI Installation">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://haeminmoon.github.io/2019/02/01/Functional-Programming/" title="Share on Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://haeminmoon.github.io/2019/02/01/Functional-Programming/" title="Share on Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://haeminmoon.github.io/2019/02/01/Functional-Programming/" title="Share on Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Harace Moon. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/02/06/aws-sam-cli/" data-tooltip="AWS-SAM-CLI Installation" aria-label="PREVIOUS: AWS-SAM-CLI Installation">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://haeminmoon.github.io/2019/02/01/Functional-Programming/" title="Share on Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://haeminmoon.github.io/2019/02/01/Functional-Programming/" title="Share on Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://haeminmoon.github.io/2019/02/01/Functional-Programming/" title="Share on Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://haeminmoon.github.io/2019/02/01/Functional-Programming/">
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://haeminmoon.github.io/2019/02/01/Functional-Programming/">
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://haeminmoon.github.io/2019/02/01/Functional-Programming/">
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/profile.jpeg" alt="Author&#39;s picture">
+        
+            <h4 id="about-card-name">Harace Moon</h4>
+        
+            <div id="about-card-bio"><p>Today, I learn</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>Software Developer</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br>
+                Korea
+            </div>
+        
+    </div>
+</div>
+
+        
+            <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-times"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search" class="form-control input--large search-input" placeholder="Search ">
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://haeminmoon.github.io/2019/02/01/Functional-Programming/">
+                            <h3 class="media-heading">Functional Programming &amp; ES6+</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Feb 1, 2019
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>함수형 자바스크립트를 위한 기초 용어 및 지식을 정리한 글 입니다.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://haeminmoon.github.io/2019/02/06/Iterator-2/">
+                            <h3 class="media-heading">Iterator - (2)</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Feb 6, 2019
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Javascript의 Iterator 대해 정리한 글 입니다.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://haeminmoon.github.io/2019/02/06/Iterator-1/">
+                            <h3 class="media-heading">Iterator - (1)</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Feb 6, 2019
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Javascript의 Iterator와 ES6+에서의 순회 기법에 대해 정리한 글 입니다.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://haeminmoon.github.io/2019/02/06/aws-cli/">
+                            <h3 class="media-heading">AWS-CLI Installation</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Feb 6, 2019
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>MAC의 OSX 환경에서 aws-cli 설치 방법과 초기 Credential 설정 방법에 대해 정리한 글 입니다.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://haeminmoon.github.io/2019/02/06/aws-sam-cli/">
+                            <h3 class="media-heading">AWS-SAM-CLI Installation</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Feb 6, 2019
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>AWS Lambda의 Serverless framework인 SAM-CLI 설치 방법에 대해 정리한 글 입니다. (OSX)</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium" data-message-zero="no post found" data-message-one="1 post found" data-message-other="{n} posts found">
+                5 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-dbd16rvloemmuxdzniplmnxxvwoz24eya9wol0b7vvmlokgqsjivmb8dnscy.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://haeminmoon.github.io/2019/02/01/Functional-Programming/';
+                 
+                    this.page.identifier = '2019/02/01/Functional-Programming/';
+                 
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'haeminmoon-github-io';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script>
+        var algoliaClient = algoliasearch('BCG1DACE7A', '20fe66a6a899add3d02b51d769c5916a');
+        var algoliaIndex = algoliaClient.initIndex('Harace&#39;s blog');
+    </script>
+
+
+    </body>
+</html>
