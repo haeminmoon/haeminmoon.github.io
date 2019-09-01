@@ -6,24 +6,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Harace&#39;s Tech Blog">
-    <title>Iterator - (2) - Harace&#39;s Tech Blog</title>
+    <title>Iterator - (1) - Harace&#39;s Tech Blog</title>
     <meta name="author" content="Harace Moon">
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Harace Moon","sameAs":["https://github.com/heaminmoon","https://www.facebook.com/profile.php?id=100001720592400","https://www.linkedin.com/in/haemin-moon-a0284315a/","mailto:mym0846@gmail.com"],"image":"profile.jpeg"},"articleBody":"Javascript의 Iterator 대해 정리한 글 입니다.\n\nIterator - (1)에서는 Iterator와 ES6의 순회에 대해 알아보았으니, Iterator의 정확한 개념과 동작 방식에 대해 알아보고자 한다.\nIterator의 동작 방식example_1js12345678// Arrayconst arr = [1, 2, 3];const iter = arr[Symbol.iterator](); // iter에 arr의 iterator를 담기.console.log(iter.next()); // { value: 1, done: false }console.log(iter.next()); // { value: 2, done: false }console.log(iter.next()); // { value: 3, done: false }console.log(iter.next()); // { value: undefined, done: true }\nexample_1 예제 코드에서는 Iterator의 동작 방식을 보여주고 있다. next()가 평가되면 { value, done } 객체가 리턴되는 모습을 볼 수 있다.\n여기서 Iterator의 한 가지 특징을 살펴보자면, Iterator는 next()가 평가되기 전까지는 다음 리턴 값을 반환하지 않는다는 특징을 가지고 있다.example_2js123456// Arrayconst arr = [1, 2, 3];const iter = arr[Symbol.iterator](); // iter에 arr의 iterator를 담기.console.log(iter.next()); // { value: 1, done: false }for (const i of iter) console.log(i) // 2 3\n\nexample_2 예제 코드와 같이 Iterator는 next() 메소드에 의해 value로 떨어지는 값만 평가하는 모습을 볼 수 있다.\n\nIterable/Iterator protocol\nIterable : Iterator를 리턴하는 [Symbol.iterator]()를 가진 값\nIterator : { value, done } 객체를 리턴하는 next() 메소드를 가진 값\nIterable/Iterator protocol : Iterable을 for…of, 전개 연산자 등과 함께 동작하도록한 규약\n\nexample_3js123// Arrayconst arr = [1, 2, 3];for (const i of arr) console.log(i); // 1 2 3\n앞서 기술한 정의가 example_1, example_2, example_3 예제 코드에 어떻게 접목되어 동작하는지 설명해보자면, 다음과 같다.\n\nArray는 Iterable 이며, Iterator를 return 할 수 있다. 즉, Iterable/Iterator protocol에 따라 for…of 문법과 함께 순회 동작을 실행 할 수 있다.\n\n사용자 정의 Iterableexample_4js1234567891011121314151617const iterable = {    [Symbol.iterator]() {        let i = 0;        return {        next() {            return i == 4 ? { done: true } : { value: i++, done: false };        },        [Symbol.iterator]() { return this; }         }    }};let iterator = iterable[Symbol.iterator]();console.log(iterator.next()); // { value: 0, done: false }console.log(iterator.next()); // { value: 1, done: false }for (const i of iterator) console.log(a); // 2 3console.log(iterator.next()); // { value: undefined, done: true }\nexample_4에서 사용자 정의 Iterable을 직접 구현해 봄으로써 Iterator와 Iterable에 대해 확실한 구분과 동작 원리에 대해 개념을 확립 할 수 있을 것이다.\nIterator와 함수형 프로그래밍 그리고 ES6Iterator에 대해 이렇게까지 세세하게 정리한 이유는 그만큼 중요한 개념이기 때문이다. 특히 Iterator는 자바스크립트에서 함수형 프로그래밍을 할 때, 아주 중요하다. 그 이유는 Iterable/Iterator protocol를 적극 활용하여 코드의 추상화와 다형성을 부여하여 보다 간결하고 예쁜 코드를 작성할 수 있기 때문이다. 뿐만 아니라 성능 측면에서도 ‘지연 평가(Lazy), 동시성 프로그래밍’을 가능하게끔 하기에 우수한 애플리케이션을 개발하기 위해서라도 아주 중요한 개념이라고 할 수 있다.\n","dateCreated":"2019-02-06T00:00:00+09:00","dateModified":"2019-09-02T01:11:31+09:00","datePublished":"2019-02-06T00:00:00+09:00","description":"Javascript의 Iterator 대해 정리한 글 입니다.","headline":"Iterator - (2)","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://haeminmoon.github.io/2019/02/06/iterator-2/"},"publisher":{"@type":"Organization","name":"Harace Moon","sameAs":["https://github.com/heaminmoon","https://www.facebook.com/profile.php?id=100001720592400","https://www.linkedin.com/in/haemin-moon-a0284315a/","mailto:mym0846@gmail.com"],"image":"profile.jpeg","logo":{"@type":"ImageObject","url":"profile.jpeg"}},"url":"http://haeminmoon.github.io/2019/02/06/iterator-2/","keywords":"Javascript, ES6+, Iterator"}</script>
-    <meta name="description" content="Javascript의 Iterator 대해 정리한 글 입니다.">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Harace Moon","sameAs":["https://github.com/heaminmoon","https://www.facebook.com/profile.php?id=100001720592400","https://www.linkedin.com/in/haemin-moon-a0284315a/","mailto:mym0846@gmail.com"],"image":"profile.jpeg"},"articleBody":"Javascript의 Iterator와 ES6+에서의 순회 기법에 대해 정리한 글 입니다. \n\nES6에서의 순회Iterator는 기본적으로 리스트를 순회하기 위한 객체이다. 즉, ES6부터 도입된 Iterator에 대해 알아보기 전에 ES6에서의 기본 순회 기법을 알아볼 필요가 있다고 느꼈다. 순회 기법이 어떻게 변화 되었는지를 살펴본 후, 심층적으로 Iterator에 대해 알아보고자 한다.\nES5에서의 순회example_1js1234567891011// Array - 배열const arr = [1, 2, 3];for (var i = 0; i &lt; arr.length; i++) {    console.log(arr[i]); // 1 2 3}// Array like type - 유사배열const str = 'abc';for (var i = 0; i &lt; str.length; i++) {    console.log(str[i]); // a b c}  \n\n숫자키와 배열의 인덱스를 기반으로 순회  \n\nES6에서의 순회example_2js1234567891011// Array - 배열const arr = [1, 2, 3];for (const i of arr) {    console.log(i); // 1 2 3}// Array like type - 유사배열const str = 'abc';for (const i of str) {    console.log(i); // a b c}  \n\nfor…of 문법을 통해 순회\n\nexample_1과 example_2에는 ES6이전과 ES6이후의 순회 기법에 대한 예제이다.\nexample_1에서는 숫자키와 배열의 인덱스를 기반으로 순회를 하였으며, example_2 에서는 for…of 문법을 통해 순회하는 것을 확인 할 수 있다.\n단순한 시각에서 바라본다면 ‘문법을 통해 간결해진 순회문.’ 정도로 생각 할 수 있겠으나, 이는 ES6가 개발자에게 ‘강력한 편의 기능을 제공하고 있으며 내재된 추상화를 통해 얼마나 예쁜 코드를 작성할 수 있는지’를 내포하고 있음을 알아야 한다.\nES6의 순회와 IteratorES6부터는 Array 자료형 뿐만 아니라 Map, Set같은 자료형도 for…of 문을 통해 순회가 가능하다.\nES6에서의 Array, Set, Map의 순회example_3js1234567891011// Arrayconst arr = [1, 2, 3];for (const i of arr) console.log(i); // 1 2 3// Setconst set = new Set([1, 2, 3]);for (const i of set) console.log(i); // 1 2 3// Mapconst map = new Map(['a', 1], ['b', 2], ['c', 3]);for (const i of map) console.log(i); // ['a', 1], ['b', 2], ['c', 3]\nexample_3에서 처럼 for…of 문법만으로 각각 다른 자료형을 순회할 수 있는 이유는 바로 Iteraotr 덕분이다.\n기본적으로 ‘Array, Set, Map’ 자료형에는 ‘Symbol.iterator’가 포함되어 있는데, 이 객체의 규약을 통해 위와 같이 순회가 가능한 것이다.\n만약 아래 예제와 같이 ‘Symbol.iterator’에 null을 대입하면 for…of문으로 순회 할 수 없다.example_4js1234// Arrayconst arr = [1, 2, 3];arr[Symbol.iterator] = null;for (const i of arr) console.log(i); // Uncaugth Type Error: arr is not iterable.  \nexample_4의 예제는 ‘iterator - 자료형 - for…of’가 서로 연관성이 있음을 말해주고 있는데, 이 연관성이 바로 Iterable protocol에 의해 동작한다는 것이다. (연관성에 대한 자세한 내용은 다음 장에서 확인.)\nIterator에 대한 이해를 돕기 위해 ES6에서의 순회 기법에 대해 확인하였으니, 본격적으로 Iterator에 대해 알아보고자 한다. Iterator - (2)\n","dateCreated":"2019-02-06T00:00:00+09:00","dateModified":"2019-09-02T01:18:40+09:00","datePublished":"2019-02-06T00:00:00+09:00","description":"Javascript의 Iterator와 ES6+에서의 순회 기법에 대해 정리한 글 입니다. ","headline":"Iterator - (1)","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://haeminmoon.github.io/2019/02/06/iterator1/"},"publisher":{"@type":"Organization","name":"Harace Moon","sameAs":["https://github.com/heaminmoon","https://www.facebook.com/profile.php?id=100001720592400","https://www.linkedin.com/in/haemin-moon-a0284315a/","mailto:mym0846@gmail.com"],"image":"profile.jpeg","logo":{"@type":"ImageObject","url":"profile.jpeg"}},"url":"http://haeminmoon.github.io/2019/02/06/iterator1/","keywords":"Javascript, ES6+, Iterator"}</script>
+    <meta name="description" content="Javascript의 Iterator와 ES6+에서의 순회 기법에 대해 정리한 글 입니다.">
 <meta name="keywords" content="Javascript,ES6+,Iterator">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="Iterator - (2)">
-<meta property="og:url" content="http://haeminmoon.github.io/2019/02/06/iterator-2/index.html">
+<meta property="og:title" content="Iterator - (1)">
+<meta property="og:url" content="http://haeminmoon.github.io/2019/02/06/iterator1/index.html">
 <meta property="og:site_name" content="Harace&#39;s Tech Blog">
-<meta property="og:description" content="Javascript의 Iterator 대해 정리한 글 입니다.">
+<meta property="og:description" content="Javascript의 Iterator와 ES6+에서의 순회 기법에 대해 정리한 글 입니다.">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-09-01T16:11:31.367Z">
+<meta property="og:updated_time" content="2019-09-01T16:18:40.932Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Iterator - (2)">
-<meta name="twitter:description" content="Javascript의 Iterator 대해 정리한 글 입니다.">
+<meta name="twitter:title" content="Iterator - (1)">
+<meta name="twitter:description" content="Javascript의 Iterator와 ES6+에서의 순회 기법에 대해 정리한 글 입니다.">
     
     
         
@@ -204,7 +204,7 @@
         <div class="post-header main-content-wrap text-left">
     
         <h1 class="post-title">
-            Iterator - (2)
+            Iterator - (1)
         </h1>
     
     
@@ -229,28 +229,27 @@
     
     <div class="post-content markdown">
         <div class="main-content-wrap">
-            <p>Javascript의 Iterator 대해 정리한 글 입니다.</p>
+            <p>Javascript의 Iterator와 ES6+에서의 순회 기법에 대해 정리한 글 입니다. </p>
 <a id="more"></a>
-<p><a href="/2019/02/06/iterator-1/">Iterator - (1)</a>에서는 Iterator와 ES6의 순회에 대해 알아보았으니, Iterator의 정확한 개념과 동작 방식에 대해 알아보고자 한다.</p>
-<h2 id="Iterator의-동작-방식"><a href="#Iterator의-동작-방식" class="headerlink" title="Iterator의 동작 방식"></a>Iterator의 동작 방식</h2><figure class="codeblock codeblock--tabbed"><figcaption><span>example_1</span><ul class="tabs"><li class="tab active">js</li></ul></figcaption><div class="tabs-content"><figure class="highlight js" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Array</span></span><br><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">const</span> iter = arr[<span class="built_in">Symbol</span>.iterator](); <span class="comment">// iter에 arr의 iterator를 담기.</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(iter.next()); <span class="comment">// { value: 1, done: false }</span></span><br><span class="line"><span class="built_in">console</span>.log(iter.next()); <span class="comment">// { value: 2, done: false }</span></span><br><span class="line"><span class="built_in">console</span>.log(iter.next()); <span class="comment">// { value: 3, done: false }</span></span><br><span class="line"><span class="built_in">console</span>.log(iter.next()); <span class="comment">// { value: undefined, done: true }</span></span><br></pre></td></tr></tbody></table></figure></div></figure>
-<p>example_1 예제 코드에서는 Iterator의 동작 방식을 보여주고 있다. next()가 평가되면 { value, done } 객체가 리턴되는 모습을 볼 수 있다.</p>
-<p>여기서 Iterator의 한 가지 특징을 살펴보자면, Iterator는 next()가 평가되기 전까지는 다음 리턴 값을 반환하지 않는다는 특징을 가지고 있다.<br><figure class="codeblock codeblock--tabbed"><figcaption><span>example_2</span><ul class="tabs"><li class="tab active">js</li></ul></figcaption><div class="tabs-content"><figure class="highlight js" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Array</span></span><br><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">const</span> iter = arr[<span class="built_in">Symbol</span>.iterator](); <span class="comment">// iter에 arr의 iterator를 담기.</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(iter.next()); <span class="comment">// { value: 1, done: false }</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> i <span class="keyword">of</span> iter) <span class="built_in">console</span>.log(i) <span class="comment">// 2 3</span></span><br></pre></td></tr></tbody></table></figure></div></figure></p>
+<h2 id="ES6에서의-순회"><a href="#ES6에서의-순회" class="headerlink" title="ES6에서의 순회"></a>ES6에서의 순회</h2><p>Iterator는 기본적으로 리스트를 순회하기 위한 객체이다. 즉, ES6부터 도입된 Iterator에 대해 알아보기 전에 ES6에서의 기본 순회 기법을 알아볼 필요가 있다고 느꼈다. 순회 기법이 어떻게 변화 되었는지를 살펴본 후, 심층적으로 Iterator에 대해 알아보고자 한다.</p>
+<p><strong>ES5에서의 순회</strong><br><figure class="codeblock codeblock--tabbed"><figcaption><span>example_1</span><ul class="tabs"><li class="tab active">js</li></ul></figcaption><div class="tabs-content"><figure class="highlight js" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Array - 배열</span></span><br><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; arr.length; i++) {</span><br><span class="line">    <span class="built_in">console</span>.log(arr[i]); <span class="comment">// 1 2 3</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// Array like type - 유사배열</span></span><br><span class="line"><span class="keyword">const</span> str = <span class="string">'abc'</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; str.length; i++) {</span><br><span class="line">    <span class="built_in">console</span>.log(str[i]); <span class="comment">// a b c</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></div></figure>  </p>
 <blockquote>
-<p>example_2 예제 코드와 같이 Iterator는 next() 메소드에 의해 value로 떨어지는 값만 평가하는 모습을 볼 수 있다.</p>
+<p>숫자키와 배열의 인덱스를 기반으로 순회  </p>
 </blockquote>
-<h2 id="Iterable-Iterator-protocol"><a href="#Iterable-Iterator-protocol" class="headerlink" title="Iterable/Iterator protocol"></a>Iterable/Iterator protocol</h2><ul>
-<li>Iterable : Iterator를 리턴하는 <span class="highlight-text danger">[Symbol.iterator]()</span>를 가진 값</li>
-<li>Iterator : { value, done } 객체를 리턴하는 next() 메소드를 가진 값</li>
-<li>Iterable/Iterator protocol : Iterable을 for…of, 전개 연산자 등과 함께 동작하도록한 규약</li>
-</ul>
-<figure class="codeblock codeblock--tabbed"><figcaption><span>example_3</span><ul class="tabs"><li class="tab active">js</li></ul></figcaption><div class="tabs-content"><figure class="highlight js" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Array</span></span><br><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> i <span class="keyword">of</span> arr) <span class="built_in">console</span>.log(i); <span class="comment">// 1 2 3</span></span><br></pre></td></tr></tbody></table></figure></div></figure>
-<p>앞서 기술한 정의가 <strong>example_1, example_2, example_3</strong> 예제 코드에 어떻게 접목되어 동작하는지 설명해보자면, 다음과 같다.</p>
+<p><strong>ES6에서의 순회</strong><br><figure class="codeblock codeblock--tabbed"><figcaption><span>example_2</span><ul class="tabs"><li class="tab active">js</li></ul></figcaption><div class="tabs-content"><figure class="highlight js" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Array - 배열</span></span><br><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> i <span class="keyword">of</span> arr) {</span><br><span class="line">    <span class="built_in">console</span>.log(i); <span class="comment">// 1 2 3</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// Array like type - 유사배열</span></span><br><span class="line"><span class="keyword">const</span> str = <span class="string">'abc'</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> i <span class="keyword">of</span> str) {</span><br><span class="line">    <span class="built_in">console</span>.log(i); <span class="comment">// a b c</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></div></figure>  </p>
 <blockquote>
-<p>Array는 Iterable 이며, Iterator를 return 할 수 있다. 즉, Iterable/Iterator protocol에 따라 for…of 문법과 함께 순회 동작을 실행 할 수 있다.</p>
+<p>for…of 문법을 통해 순회</p>
 </blockquote>
-<h2 id="사용자-정의-Iterable"><a href="#사용자-정의-Iterable" class="headerlink" title="사용자 정의 Iterable"></a>사용자 정의 Iterable</h2><figure class="codeblock codeblock--tabbed"><figcaption><span>example_4</span><ul class="tabs"><li class="tab active">js</li></ul></figcaption><div class="tabs-content"><figure class="highlight js" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> iterable = {</span><br><span class="line">    [<span class="built_in">Symbol</span>.iterator]() {</span><br><span class="line">        <span class="keyword">let</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> {</span><br><span class="line">        next() {</span><br><span class="line">            <span class="keyword">return</span> i == <span class="number">4</span> ? { <span class="attr">done</span>: <span class="literal">true</span> } : { <span class="attr">value</span>: i++, <span class="attr">done</span>: <span class="literal">false</span> };</span><br><span class="line">        },</span><br><span class="line">        [<span class="built_in">Symbol</span>.iterator]() { <span class="keyword">return</span> <span class="keyword">this</span>; } </span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> iterator = iterable[<span class="built_in">Symbol</span>.iterator]();</span><br><span class="line"><span class="built_in">console</span>.log(iterator.next()); <span class="comment">// { value: 0, done: false }</span></span><br><span class="line"><span class="built_in">console</span>.log(iterator.next()); <span class="comment">// { value: 1, done: false }</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> i <span class="keyword">of</span> iterator) <span class="built_in">console</span>.log(a); <span class="comment">// 2 3</span></span><br><span class="line"><span class="built_in">console</span>.log(iterator.next()); <span class="comment">// { value: undefined, done: true }</span></span><br></pre></td></tr></tbody></table></figure></div></figure>
-<p><strong>example_4</strong>에서 사용자 정의 Iterable을 직접 구현해 봄으로써 Iterator와 Iterable에 대해 확실한 구분과 동작 원리에 대해 개념을 확립 할 수 있을 것이다.</p>
-<h2 id="Iterator와-함수형-프로그래밍-그리고-ES6"><a href="#Iterator와-함수형-프로그래밍-그리고-ES6" class="headerlink" title="Iterator와 함수형 프로그래밍 그리고 ES6"></a>Iterator와 함수형 프로그래밍 그리고 ES6</h2><p>Iterator에 대해 이렇게까지 세세하게 정리한 이유는 그만큼 중요한 개념이기 때문이다. 특히 Iterator는 자바스크립트에서 함수형 프로그래밍을 할 때, 아주 중요하다. 그 이유는 Iterable/Iterator protocol를 적극 활용하여 코드의 추상화와 다형성을 부여하여 보다 간결하고 예쁜 코드를 작성할 수 있기 때문이다. 뿐만 아니라 성능 측면에서도 ‘지연 평가(Lazy), 동시성 프로그래밍’을 가능하게끔 하기에 우수한 애플리케이션을 개발하기 위해서라도 아주 중요한 개념이라고 할 수 있다.</p>
+<p><strong>example_1</strong>과 <strong>example_2</strong>에는 ES6이전과 ES6이후의 순회 기법에 대한 예제이다.</p>
+<p><strong>example_1</strong>에서는 숫자키와 배열의 인덱스를 기반으로 순회를 하였으며, <strong>example_2</strong> 에서는 for…of 문법을 통해 순회하는 것을 확인 할 수 있다.</p>
+<p>단순한 시각에서 바라본다면 <strong>‘문법을 통해 간결해진 순회문.’</strong> 정도로 생각 할 수 있겠으나, 이는 ES6가 개발자에게 ‘강력한 편의 기능을 제공하고 있으며 내재된 추상화를 통해 얼마나 예쁜 코드를 작성할 수 있는지’를 내포하고 있음을 알아야 한다.</p>
+<h2 id="ES6의-순회와-Iterator"><a href="#ES6의-순회와-Iterator" class="headerlink" title="ES6의 순회와 Iterator"></a>ES6의 순회와 Iterator</h2><p>ES6부터는 Array 자료형 뿐만 아니라 Map, Set같은 자료형도 for…of 문을 통해 순회가 가능하다.</p>
+<p><strong>ES6에서의 Array, Set, Map의 순회</strong><br><figure class="codeblock codeblock--tabbed"><figcaption><span>example_3</span><ul class="tabs"><li class="tab active">js</li></ul></figcaption><div class="tabs-content"><figure class="highlight js" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Array</span></span><br><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> i <span class="keyword">of</span> arr) <span class="built_in">console</span>.log(i); <span class="comment">// 1 2 3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Set</span></span><br><span class="line"><span class="keyword">const</span> set = <span class="keyword">new</span> <span class="built_in">Set</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> i <span class="keyword">of</span> set) <span class="built_in">console</span>.log(i); <span class="comment">// 1 2 3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Map</span></span><br><span class="line"><span class="keyword">const</span> map = <span class="keyword">new</span> <span class="built_in">Map</span>([<span class="string">'a'</span>, <span class="number">1</span>], [<span class="string">'b'</span>, <span class="number">2</span>], [<span class="string">'c'</span>, <span class="number">3</span>]);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> i <span class="keyword">of</span> map) <span class="built_in">console</span>.log(i); <span class="comment">// ['a', 1], ['b', 2], ['c', 3]</span></span><br></pre></td></tr></tbody></table></figure></div></figure></p>
+<p><strong>example_3</strong>에서 처럼 for…of 문법만으로 각각 다른 자료형을 순회할 수 있는 이유는 바로 Iteraotr 덕분이다.</p>
+<p>기본적으로 ‘Array, Set, Map’ 자료형에는 ‘Symbol.iterator’가 포함되어 있는데, 이 객체의 규약을 통해 위와 같이 순회가 가능한 것이다.</p>
+<p>만약 아래 예제와 같이 ‘Symbol.iterator’에 null을 대입하면 for…of문으로 순회 할 수 없다.<br><figure class="codeblock codeblock--tabbed"><figcaption><span>example_4</span><ul class="tabs"><li class="tab active">js</li></ul></figcaption><div class="tabs-content"><figure class="highlight js" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Array</span></span><br><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">arr[<span class="built_in">Symbol</span>.iterator] = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> i <span class="keyword">of</span> arr) <span class="built_in">console</span>.log(i); <span class="comment">// Uncaugth Type Error: arr is not iterable.</span></span><br></pre></td></tr></tbody></table></figure></div></figure>  </p>
+<p><strong>example_4</strong>의 예제는 ‘iterator - 자료형 - for…of’가 서로 연관성이 있음을 말해주고 있는데, 이 연관성이 바로 Iterable protocol에 의해 동작한다는 것이다. (연관성에 대한 자세한 내용은 다음 장에서 확인.)</p>
+<p>Iterator에 대한 이해를 돕기 위해 ES6에서의 순회 기법에 대해 확인하였으니, 본격적으로 Iterator에 대해 알아보고자 한다. <a href="/2019/02/06/iterator-2/">Iterator - (2)</a></p>
 
             
 
@@ -272,7 +271,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/02/06/iterator-1/" data-tooltip="Iterator - (1)" aria-label="PREVIOUS: Iterator - (1)">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/02/06/aws-sam-cli/" data-tooltip="AWS-SAM-CLI Installation" aria-label="PREVIOUS: AWS-SAM-CLI Installation">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
@@ -281,7 +280,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/02/01/functional-programming/" data-tooltip="Functional Programming &amp; ES6+" aria-label="NEXT: Functional Programming &amp; ES6+">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/02/06/iterator2/" data-tooltip="Iterator - (2)" aria-label="NEXT: Iterator - (2)">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -299,7 +298,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://haeminmoon.github.io/2019/02/06/iterator-2/" title="Share on Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://haeminmoon.github.io/2019/02/06/iterator1/" title="Share on Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -307,7 +306,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://haeminmoon.github.io/2019/02/06/iterator-2/" title="Share on Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://haeminmoon.github.io/2019/02/06/iterator1/" title="Share on Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -315,7 +314,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://haeminmoon.github.io/2019/02/06/iterator-2/" title="Share on Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://haeminmoon.github.io/2019/02/06/iterator1/" title="Share on Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -368,7 +367,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/02/06/iterator-1/" data-tooltip="Iterator - (1)" aria-label="PREVIOUS: Iterator - (1)">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/02/06/aws-sam-cli/" data-tooltip="AWS-SAM-CLI Installation" aria-label="PREVIOUS: AWS-SAM-CLI Installation">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
@@ -377,7 +376,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/02/01/functional-programming/" data-tooltip="Functional Programming &amp; ES6+" aria-label="NEXT: Functional Programming &amp; ES6+">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/02/06/iterator2/" data-tooltip="Iterator - (2)" aria-label="NEXT: Iterator - (2)">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -395,7 +394,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://haeminmoon.github.io/2019/02/06/iterator-2/" title="Share on Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://haeminmoon.github.io/2019/02/06/iterator1/" title="Share on Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -403,7 +402,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://haeminmoon.github.io/2019/02/06/iterator-2/" title="Share on Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://haeminmoon.github.io/2019/02/06/iterator1/" title="Share on Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -411,7 +410,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://haeminmoon.github.io/2019/02/06/iterator-2/" title="Share on Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://haeminmoon.github.io/2019/02/06/iterator1/" title="Share on Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -445,7 +444,7 @@
                 
                 
                 <li class="share-option">
-                    <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://haeminmoon.github.io/2019/02/06/iterator-2/">
+                    <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://haeminmoon.github.io/2019/02/06/iterator1/">
                         <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
                     </a>
                 </li>
@@ -453,7 +452,7 @@
                 
                 
                 <li class="share-option">
-                    <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://haeminmoon.github.io/2019/02/06/iterator-2/">
+                    <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://haeminmoon.github.io/2019/02/06/iterator1/">
                         <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
                     </a>
                 </li>
@@ -461,7 +460,7 @@
                 
                 
                 <li class="share-option">
-                    <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://haeminmoon.github.io/2019/02/06/iterator-2/">
+                    <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://haeminmoon.github.io/2019/02/06/iterator1/">
                         <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
                     </a>
                 </li>
@@ -531,7 +530,7 @@
                 <div class="media">
                     
                     <div class="media-body">
-                        <a class="link-unstyled" href="http://haeminmoon.github.io/2019/02/01/functional-programming/">
+                        <a class="link-unstyled" href="http://haeminmoon.github.io/2019/02/01/Functional-Programming/">
                             <h3 class="media-heading">Functional Programming &amp; ES6+</h3>
                         </a>
                         <span class="media-meta">
@@ -541,7 +540,7 @@
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>함수형 자바스크립트를 위한 기초 용어 및 지식을 정리한 글 입니다.</p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>함수형 자바스크립트를 위한 기초 용어 및 지식을 정리한 글 입니다. </p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -588,7 +587,7 @@
                 <div class="media">
                     
                     <div class="media-body">
-                        <a class="link-unstyled" href="http://haeminmoon.github.io/2019/02/06/iterator-1/">
+                        <a class="link-unstyled" href="http://haeminmoon.github.io/2019/02/06/iterator1/">
                             <h3 class="media-heading">Iterator - (1)</h3>
                         </a>
                         <span class="media-meta">
@@ -598,7 +597,7 @@
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>Javascript의 Iterator와 ES6+에서의 순회 기법에 대해 정리한 글 입니다.</p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>Javascript의 Iterator와 ES6+에서의 순회 기법에 대해 정리한 글 입니다. </p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -607,7 +606,7 @@
                 <div class="media">
                     
                     <div class="media-body">
-                        <a class="link-unstyled" href="http://haeminmoon.github.io/2019/02/06/iterator-2/">
+                        <a class="link-unstyled" href="http://haeminmoon.github.io/2019/02/06/iterator2/">
                             <h3 class="media-heading">Iterator - (2)</h3>
                         </a>
                         <span class="media-meta">
@@ -643,9 +642,9 @@
     
         <script>
              var disqus_config = function () {
-                 this.page.url = 'http://haeminmoon.github.io/2019/02/06/iterator-2/';
+                 this.page.url = 'http://haeminmoon.github.io/2019/02/06/iterator1/';
                  
-                    this.page.identifier = '2019/02/06/iterator-2/';
+                    this.page.identifier = '2019/02/06/iterator1/';
                  
              };
             (function() {
